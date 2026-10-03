@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { colors } from "../theme";
 
 type ProgressBarProps = {
@@ -8,21 +8,41 @@ type ProgressBarProps = {
     label: string;
 };
 
-const percentage = max > 0
-    ? Math.min(100, Math.max(0, (value / max) * 100))
-    : 0;
+export function ProgressBar({
+    value,
+    max,
+    color,
+    label,
+}: ProgressBarProps) {
+    const percentage =
+        max > 0
+            ? Math.min(100, Math.max(0, (value / max) * 100))
+            : 0;
 
-<View style={styles.track}>
-    <View
-        style={[
-            styles.fill,
-            {
-                width: `${percentage}%`,
-                backgroundColor: color,
-            },
-        ]}
-    />
-</View>
+    return (
+        <View
+            style={styles.track}
+            accessible
+            accessibilityRole="progressbar"
+            accessibilityLabel={label}
+            accessibilityValue={{
+                min: 0,
+                max: 100,
+                now: percentage,
+            }}
+        >
+            <View
+                style={[
+                    styles.fill,
+                    {
+                        width: `${percentage}%`,
+                        backgroundColor: color,
+                    },
+                ]}
+            />
+        </View>
+    );
+}
 
 const styles = StyleSheet.create({
     track: {
@@ -31,5 +51,7 @@ const styles = StyleSheet.create({
         overflow: "hidden",
         backgroundColor: colors.background,
     },
-    fill: { height: "100%" },
+    fill: { 
+        height: "100%" 
+    },
 });
